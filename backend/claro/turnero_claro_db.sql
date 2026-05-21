@@ -48,25 +48,22 @@ CREATE TABLE compras (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
--- ==========================================
--- MÓDULO 3: TURNERO (Atención al Cliente)
--- ==========================================
 
 CREATE TABLE departamentos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     codigo_prefijo VARCHAR(5) NOT NULL, 
-    nivel_prioridad INT NOT NULL, -- 1: Máxima prioridad, 4: Menor prioridad
+    nivel_prioridad INT NOT NULL, 
     es_prioritario BOOLEAN NOT NULL 
 );
 
 CREATE TABLE turnos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    numero_correlativo VARCHAR(20) NOT NULL, -- Ej: 'RET-001'
+    numero_correlativo VARCHAR(20) NOT NULL, 
     usuario_id BIGINT NOT NULL, 
     departamento_id BIGINT NOT NULL,
     estado ENUM('PENDIENTE', 'LLAMADO', 'ATENDIDO', 'CANCELADO') DEFAULT 'PENDIENTE',
-    prioridad_actual DECIMAL(3,1) NOT NULL, -- Para el algoritmo de aging
+    prioridad_actual DECIMAL(3,1) NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_llamado TIMESTAMP NULL,
     fecha_atencion TIMESTAMP NULL,
@@ -75,9 +72,6 @@ CREATE TABLE turnos (
 );
 
 
--- ==========================================
--- INSERCIÓN DE DATOS INICIALES (Seeders)
--- ==========================================
 
 INSERT INTO departamentos (nombre, codigo_prefijo, nivel_prioridad, es_prioritario) VALUES 
 ('Retenciones', 'RET', 1, TRUE),
@@ -97,9 +91,6 @@ INSERT INTO productos (nombre, marca, tipo, descripcion, precio) VALUES
 ('Audífonos Huawei FreeBuds 5i', 'Huawei', 'ACCESORIOS', 'Cancelación de ruido activa', 350000.00);
 
 
--- ==========================================
--- AUTOMATIZACIÓN Y VISTAS
--- ==========================================
 
 -- 1. Trigger para asignar la prioridad base automáticamente al sacar un turno
 DELIMITER //
