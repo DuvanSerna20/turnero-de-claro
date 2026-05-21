@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TurnosService } from '../../service/turnos.service';
 import { AuthService } from '../../service/auth.service';
@@ -10,13 +10,14 @@ import { Router } from '@angular/router';
   templateUrl: './turnero.html',
   styleUrl: './turnero.css',
 })
-export class Turnero implements OnInit {
+export class Turnero implements OnInit, OnDestroy {
   departamentos: any[] = [];
   cola: any[] = [];
   cargando = true;
   mensaje = '';
   mensajeError = false;
   turnoCreado: any = null;
+  private autoRefresh: any;
 
   constructor(
     private turnosService: TurnosService,
@@ -27,6 +28,16 @@ export class Turnero implements OnInit {
 
   ngOnInit() {
     this.cargarDatos();
+    // Auto-refrescar la cola cada 5 segundos
+    this.autoRefresh = setInterval(() => {
+      this.cargarCola(true);
+    }, 5000);
+  }
+
+  ngOnDestroy() {
+    if (this.autoRefresh) {
+      clearInterval(this.autoRefresh);
+    }
   }
 
   cargarDatos() {
@@ -46,11 +57,29 @@ export class Turnero implements OnInit {
     });
   }
 
-  cargarCola() {
+  cargarCola(esRefreshOculto = false) {
+    if (!esRefreshOculto) this.cargando = true;
     this.turnosService.obtenerCola().subscribe({
       next: (cola) => { 
         this.cola = cola; 
         this.cargando = false; 
+
+        // Verificar si el turno del usuario fue llamado
+        if (this.turnoCreado) {
+          const miTurnoSiguePendiente = this.cola.find(t => t.id === this.turnoCreado.id);
+          if (!miTurnoSiguePendiente) {
+            // Ya no está pendiente, fue llamado!
+            this.mensaje = `🔔 ¡Tu turno ${this.turnoCreado.numeroCorrelativo} ha sido llamado a ventanilla!`;
+            this.mensajeError = false;
+            this.turnoCreado = null;
+            // Limpiar mensaje después de un tiempo
+            setTimeout(() => {
+              if (this.mensaje.includes('llamado')) this.mensaje = '';
+              this.cdr.detectChanges();
+            }, 8000);
+          }
+        }
+
         this.cdr.detectChanges();
       },
       error: () => { 
