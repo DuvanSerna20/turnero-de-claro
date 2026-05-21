@@ -1,0 +1,57 @@
+<div class="turnero-page">
+  <div class="turnero-header">
+    <h1>🎫 Sistema de Turnos</h1>
+    <p>Solicita tu turno y evita las filas</p>
+  </div>
+
+  <!-- Mensaje de estado -->
+  <div *ngIf="mensaje" class="alerta" [class.alerta-exito]="!mensajeError" [class.alerta-error]="mensajeError">
+    {{ mensaje }}
+  </div>
+
+  <!-- Turno creado actualmente -->
+  <div *ngIf="turnoCreado" class="turno-activo">
+    <div class="turno-numero">{{ turnoCreado.numeroCorrelativo }}</div>
+    <p>Tu turno está en cola — <strong>{{ turnoCreado.departamento?.nombre }}</strong></p>
+    <button class="btn-cancelar" (click)="cancelarTurno(turnoCreado.id)">❌ Cancelar turno</button>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="cargando">
+    <div class="spinner"></div>
+    <p>Conectando con el servidor...</p>
+  </div>
+
+  <div *ngIf="!cargando" class="turnero-content">
+    <!-- Departamentos -->
+    <div class="seccion">
+      <h2>Selecciona un departamento</h2>
+      <div class="departamentos-grid">
+        <div *ngFor="let dept of departamentos" class="dept-card" [class.prioritario]="dept.esPrioritario">
+          <div class="dept-codigo">{{ dept.codigoPrefijo }}</div>
+          <h3>{{ dept.nombre }}</h3>
+          <p *ngIf="dept.esPrioritario" class="badge-prioritario">⭐ Prioritario</p>
+          <button class="btn-turno" (click)="solicitarTurno(dept.id)" [disabled]="!!turnoCreado">
+            {{ turnoCreado ? 'Ya tienes un turno' : 'Solicitar turno' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cola de espera -->
+    <div class="seccion">
+      <h2>Cola de espera ({{ cola.length }} turnos)</h2>
+      <div *ngIf="cola.length === 0" class="sin-datos">No hay turnos pendientes. 🎉</div>
+      <div class="cola-lista">
+        <div *ngFor="let t of cola; let i = index" class="cola-item">
+          <span class="posicion">{{ i + 1 }}</span>
+          <div class="cola-info">
+            <strong>{{ t.numeroCorrelativo }}</strong>
+            <span>{{ t.departamento?.nombre }}</span>
+          </div>
+          <span class="espera">⏱ {{ calcularEspera(t.fechaCreacion) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

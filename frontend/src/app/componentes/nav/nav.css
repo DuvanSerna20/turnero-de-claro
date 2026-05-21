@@ -1,0 +1,262 @@
+:host {
+  display: block;
+  --claro-red: #DA291C;
+  --claro-teal: #00A4A6;
+  --header-height-desktop: 76px;
+  --header-height-mobile: 60px;
+}
+
+.newHeaderRed {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* Claro header uses a slight gradient */
+  background: linear-gradient(to right, #DA291C, #C32115);
+  width: 100%;
+  font-family: "Roboto", helvetica, sans-serif;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.headerContainer {
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* === DESKTOP NAVIGATION === */
+.header__navegation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height-desktop);
+  padding: 0 20px;
+}
+
+.containerCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+.menuButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  transition: opacity 0.2s;
+}
+
+.menuButton:hover {
+  opacity: 0.8;
+}
+
+/* === SEARCH BAR === */
+.searchBarRed__wrapper {
+  flex-grow: 1;
+  max-width: 650px;
+  margin: 0 40px;
+  display: flex;
+  align-items: center;
+}
+
+.searchBarRed__search-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchBarRed__search-input {
+  width: 100%;
+  height: 44px; /* Slightly slimmer */
+  border-radius: 4px; /* Original Claro is less rounded */
+  border: none;
+  padding: 0 50px 0 20px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  color: #333;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.searchBarRed__search-input::placeholder {
+  color: #888;
+}
+
+.searchBarRed__search-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0;
+}
+
+/* === ICONS RIGHT SIDE === */
+.box-search-all {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 35px; /* Spread slightly more */
+  align-items: center;
+}
+
+.item-icon-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  gap: 6px; /* Spacing between icon and text */
+  transition: opacity 0.2s;
+}
+
+.item-icon-link:hover {
+  opacity: 0.8;
+}
+
+.item-icon-link span {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #FFC107;
+  border-radius: 50%;
+  border: 1px solid var(--claro-red); /* Helps separate dot from icon */
+}
+
+/* === MOBILE NAVIGATION === */
+.box__mobile {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--header-height-mobile);
+  width: 100%;
+}
+
+.box__ln {
+  display: flex;
+  align-items: center;
+}
+
+/* RESPONSIVE TOGGLE */
+@media screen and (max-width: 900px) {
+  .header__navegation {
+    display: none; /* Hide desktop nav */
+  }
+
+  .box__mobile {
+    display: flex; /* Show mobile nav */
+  }
+}
+.drawer-link.logout-link {
+    color: #DA291C;
+    font-weight: 500;
+}
+
+.drawer-link.logout-link:hover {
+    background: #fff5f5;
+}
+
+/* === SIDE DRAWER === */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 2000;
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100vh;
+  background-color: white;
+  z-index: 2001;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer.open {
+  left: 0;
+}
+
+.drawer-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.drawer-content {
+  padding: 20px 0;
+}
+
+.drawer-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.drawer-link {
+  display: block;
+  padding: 15px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.drawer-link:hover {
+  background-color: #f5f5f5;
+}
+
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 10px 20px;
+}

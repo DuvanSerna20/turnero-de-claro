@@ -1,0 +1,218 @@
+/* Base container */
+.registro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Roboto', 'Inter', sans-serif;
+  color: #333;
+}
+
+/* Logo */
+.logo-container {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Title */
+.registro-title {
+  font-size: 22px;
+  font-weight: 800; /* Extra bold */
+  margin-bottom: 30px;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+  grid-column: 1 / -1;
+}
+
+/* Form Layout using Grid */
+.registro-form {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px 25px; /* row-gap, column-gap */
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 600px) {
+  .registro-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #333;
+  font-weight: 400;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 14.5px;
+  border: 1px solid #aaa;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+  background-color: white;
+}
+
+.form-group input::placeholder, .form-group select:invalid {
+  color: #888;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: #007f87;
+  box-shadow: 0 0 0 1px #007f87;
+}
+
+.form-group input.invalid, .form-group select.invalid {
+  border-color: #da291c;
+}
+
+/* Disabled input styling to match screenshot */
+.form-group input:disabled {
+  background-color: #b3b3b3;
+  color: #333;
+  cursor: not-allowed;
+  border-color: #b3b3b3;
+}
+.form-group input:disabled::placeholder {
+  color: #333;
+}
+
+/* Custom Select Dropdown */
+.select-container {
+  position: relative;
+}
+.select-container select {
+  appearance: none; /* Hide default arrow */
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.select-container .dropdown-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* Don't block clicks */
+}
+
+/* Checkbox group styling */
+.checkbox-group {
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  cursor: pointer;
+  font-size: 13.5px;
+  user-select: none;
+  line-height: 1.4;
+}
+
+/* Hide default checkbox */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Custom checkmark circle */
+.checkmark {
+  position: relative;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  min-width: 20px;
+  background-color: transparent;
+  border: 1.5px solid #007f87;
+  border-radius: 50%; /* Circle */
+  margin-right: 12px;
+  transition: all 0.2s;
+}
+
+/* Checked state */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #007f87;
+}
+
+/* Draw checkmark */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Links inside checkbox */
+.checkbox-text a {
+  color: #007f87;
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #444;
+  background-color: #b3b3b3;
+  border: none;
+  border-radius: 25px;
+  cursor: not-allowed;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  transition: background-color 0.3s, color 0.3s;
+  grid-column: 1 / -1;
+}
+
+.submit-button:not([disabled]) {
+  background-color: #da291c;
+  color: white;
+  cursor: pointer;
+}
+
+.submit-button:not([disabled]):hover {
+  background-color: #c01a11;
+}

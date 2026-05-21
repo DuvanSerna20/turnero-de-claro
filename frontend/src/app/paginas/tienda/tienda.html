@@ -1,0 +1,42 @@
+<div class="tienda-page">
+  <div class="tienda-header">
+    <h1>🛒 Planes y Servicios</h1>
+    <p>Elige el plan perfecto para ti</p>
+  </div>
+
+  <!-- Mensaje de estado -->
+  <div *ngIf="mensaje" class="alerta" [class.alerta-exito]="!mensajeError" [class.alerta-error]="mensajeError">
+    {{ mensaje }}
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <button (click)="filtrar('TODOS')" [class.activo]="filtroActivo === 'TODOS'">📦 Todos</button>
+    <button (click)="filtrar('MOVIL')" [class.activo]="filtroActivo === 'MOVIL'">📱 Móvil</button>
+    <button (click)="filtrar('HOGAR')" [class.activo]="filtroActivo === 'HOGAR'">🏠 Hogar</button>
+    <button (click)="filtrar('ENTRETENIMIENTO')" [class.activo]="filtroActivo === 'ENTRETENIMIENTO'">🎬 Entretenimiento</button>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="cargando">
+    <div class="spinner"></div>
+    <p>Cargando planes...</p>
+  </div>
+
+  <!-- Sin planes -->
+  <div *ngIf="!cargando && planes.length === 0 && !mensajeError" class="sin-datos">
+    <p>No hay planes disponibles en esta categoría.</p>
+  </div>
+
+  <!-- Tarjetas de planes -->
+  <div *ngIf="!cargando" class="planes-grid">
+    <div *ngFor="let plan of planes" class="plan-card">
+      <div class="plan-icono">{{ getIcono(plan.tipo) }}</div>
+      <div class="plan-badge">{{ plan.tipo }}</div>
+      <h3>{{ plan.nombre }}</h3>
+      <p class="descripcion">{{ plan.descripcion }}</p>
+      <div class="precio">{{ formatPrecio(plan.precio) }}<span>/mes</span></div>
+      <button class="btn-contratar" (click)="agregarAlCarrito(plan)">Agregar al carrito</button>
+    </div>
+  </div>
+</div>

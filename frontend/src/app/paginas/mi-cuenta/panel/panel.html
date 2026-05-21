@@ -1,0 +1,72 @@
+<div class="panel-container" *ngIf="usuario">
+    <div class="panel-header">
+        <h1>Mi Perfil</h1>
+        <p>Bienvenido de nuevo, {{ usuario.nombres }}</p>
+    </div>
+
+    <div class="panel-grid">
+        <!-- Card: Información Personal -->
+        <div class="panel-card info-card">
+            <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DA291C" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <h3>Datos Personales</h3>
+            </div>
+            <div class="card-content">
+                <div class="info-item">
+                    <label>Nombre Completo</label>
+                    <span>{{ usuario.nombres }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Correo Electrónico</label>
+                    <span>{{ usuario.email }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Documento de Identidad</label>
+                    <span>{{ usuario.documento }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Número de Celular</label>
+                    <span>{{ usuario.celular }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Accesos Rápidos -->
+        <div class="panel-card actions-card">
+            <div class="card-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00A4A6" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="9" y1="3" x2="9" y2="21"></line>
+                </svg>
+                <h3>Gestión Rápida</h3>
+            </div>
+            <div class="card-content">
+                <button class="action-btn" routerLink="/turnero">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Pedir un Turno
+                </button>
+                <button class="action-btn" routerLink="/compras">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    </svg>
+                    Mis Servicios
+                </button>
+                <button class="action-btn logout-btn" (click)="cerrarSesion()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

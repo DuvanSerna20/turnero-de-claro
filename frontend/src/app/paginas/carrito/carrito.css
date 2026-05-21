@@ -1,0 +1,255 @@
+.carrito-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.carrito-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.carrito-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.carrito-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.alerta {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.alerta-exito {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.alerta-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 50px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.sin-datos p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.btn-volver {
+  padding: 12px 24px;
+  background-color: #DA291C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-volver:hover {
+  background-color: #b71c1c;
+}
+
+.carrito-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .carrito-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.carrito-items {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.carrito-items h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.carrito-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.carrito-item:last-child {
+  border-bottom: none;
+}
+
+.item-icono {
+  font-size: 2.5rem;
+  margin-right: 20px;
+}
+
+.item-info {
+  flex-grow: 1;
+}
+
+.item-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.item-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.item-precio {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #DA291C;
+  margin: 0 20px;
+}
+
+.btn-eliminar {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+  padding: 10px;
+}
+
+.btn-eliminar:hover {
+  color: #d32f2f;
+}
+
+.carrito-resumen {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  height: fit-content;
+}
+
+.carrito-resumen h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.resumen-fila {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.resumen-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px dashed #eee;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.metodos-pago {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.metodos-pago h3 {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.metodos-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metodo-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.metodo-card:hover {
+  border-color: #ccc;
+  background-color: #f9f9f9;
+}
+
+.metodo-card.seleccionado {
+  border-color: #00A4A6;
+  background-color: #e0f7fa;
+}
+
+.metodo-icono {
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
+
+.metodo-nombre {
+  font-weight: 500;
+  color: #333;
+}
+
+.btn-comprar {
+  width: 100%;
+  padding: 15px;
+  background-color: #DA291C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.btn-comprar:hover:not(:disabled) {
+  background-color: #b71c1c;
+}
+
+.btn-comprar:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

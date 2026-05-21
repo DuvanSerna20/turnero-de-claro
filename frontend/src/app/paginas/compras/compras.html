@@ -1,0 +1,39 @@
+<div class="compras-page">
+  <div class="compras-header">
+    <h1>🧾 Mis Compras</h1>
+    <p>Historial de planes contratados</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="mensaje" class="alerta alerta-error">{{ mensaje }}</div>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="cargando">
+    <div class="spinner"></div>
+    <p>Cargando historial...</p>
+  </div>
+
+  <!-- Sin compras -->
+  <div *ngIf="!cargando && compras.length === 0 && !mensaje" class="sin-datos">
+    <div class="sin-datos-icono">🛍️</div>
+    <h3>Aún no has contratado ningún plan</h3>
+    <p>Visita nuestra <a routerLink="/tienda">Tienda</a> para ver los planes disponibles.</p>
+  </div>
+
+  <!-- Lista de compras -->
+  <div *ngIf="!cargando && compras.length > 0" class="compras-lista">
+    <div *ngFor="let compra of compras" class="compra-card">
+      <div class="compra-icono">{{ getIcono(compra.plan?.tipo) }}</div>
+      <div class="compra-info">
+        <h3>{{ compra.plan?.nombre }}</h3>
+        <span class="compra-tipo">{{ compra.plan?.tipo }}</span>
+        <p class="compra-descripcion">{{ compra.plan?.descripcion }}</p>
+        <div class="compra-meta">
+          <span>💳 {{ compra.metodoPago }}</span>
+          <span>📅 {{ formatFecha(compra.fechaCompra) }}</span>
+        </div>
+      </div>
+      <div class="compra-precio">{{ formatPrecio(compra.plan?.precio) }}<span>/mes</span></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,325 @@
+/* ── Página base ─────────────────────────────────────────── */
+:host {
+  --claro-red: #e30613;
+  --claro-dark: #1a1a2e;
+  --claro-mid: #16213e;
+  --claro-blue: #0f3460;
+  --accent: #e94560;
+  --text-light: #222222;
+  --text-muted: #666666;
+  --card-bg: #ffffff;
+  --radius: 16px;
+
+  display: block;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-light);
+}
+
+/* ── Hero Section ────────────────────────────────────────── */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5rem 10%;
+  gap: 3rem;
+  background: radial-gradient(circle at 80% 50%, rgba(227, 6, 19, 0.15), transparent 50%);
+}
+
+.hero-texto {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero-texto h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.hero-texto h1 span {
+  color: var(--claro-red);
+}
+
+.hero-texto p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.btn-hero {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--claro-red), #ff4d4d);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(227, 6, 19, 0.4);
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(227, 6, 19, 0.6);
+}
+
+.hero-imagen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-badge {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  border-radius: 50%;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero-badge span {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-badge strong {
+  font-size: 1.5rem;
+  color: #222;
+  display: block;
+}
+
+.hero-badge small {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* ── Secciones Comunes ───────────────────────────────────── */
+section {
+  padding: 4rem 10%;
+}
+
+section h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.subtitulo {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+/* ── Grid de Planes ──────────────────────────────────────── */
+.planes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.plan-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--color);
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.plan-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.plan-icono {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.plan-tipo {
+  background: rgba(255,255,255,0.1);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.plan-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-light);
+}
+
+.plan-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  min-height: 3em; /* Para igualar alturas si varían líneas */
+}
+
+.plan-precio {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.plan-precio span {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.btn-plan {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.plan-card:hover .btn-plan {
+  background: var(--color);
+  border-color: var(--color);
+  color: white;
+}
+
+.categorias {
+  background: transparent;
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.cat-item {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  padding: 2rem 1.5rem;
+  border-radius: var(--radius);
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-light);
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.cat-item:hover {
+  background: #fff;
+  transform: translateY(-5px);
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.cat-item span {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cat-item strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cat-item small {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ── Utilidades ──────────────────────────────────────────── */
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top-color: var(--claro-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-msg {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid #ef4444;
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 4rem 5%;
+  }
+  .hero-texto h1 {
+    font-size: 2.5rem;
+  }
+}

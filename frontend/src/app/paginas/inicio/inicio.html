@@ -1,0 +1,82 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-texto">
+    <h1>Conecta con lo mejor<br><span>de Claro</span></h1>
+    <p>Internet, móvil y entretenimiento para tu hogar y tu vida.</p>
+    <a routerLink="/tienda" class="btn-hero">Ver todos los planes →</a>
+  </div>
+  <div class="hero-imagen">
+    <div class="hero-badge">
+      <span>🚀</span>
+      <strong>Fibra Óptica</strong>
+      <small>hasta 500 MB</small>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES DESDE LA BD -->
+<section class="planes-seccion">
+  <h2>Nuestros Planes</h2>
+  <p class="subtitulo">Directo desde nuestra base de datos</p>
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="spinner-wrap">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Error de conexión -->
+  <div *ngIf="error" class="error-msg">
+    ⚠️ No se pudo conectar al servidor. Verifica que el backend esté activo en el puerto 8080.
+  </div>
+
+  <!-- Tarjetas de planes -->
+  <div *ngIf="!cargando && !error" class="planes-grid">
+    <div *ngFor="let plan of planes" class="plan-card" [style.--color]="getColor(plan.tipo)">
+      <div class="plan-top">
+        <span class="plan-icono">{{ getIcono(plan.tipo) }}</span>
+        <span class="plan-tipo">{{ plan.tipo }}</span>
+      </div>
+      <h3>{{ plan.nombre }}</h3>
+      <p>{{ plan.descripcion }}</p>
+      <div class="plan-precio">
+        {{ formatPrecio(plan.precio) }}<span>/mes</span>
+      </div>
+      <a routerLink="/tienda" class="btn-plan">Contratar</a>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER TURNERO -->
+<section class="banner-turnero" style="background: linear-gradient(135deg, #1a1a2e 0%, #da291c 100%); color: white; padding: 40px 20px; border-radius: 12px; margin: 40px auto; max-width: 1200px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+  <div style="flex: 1; min-width: 300px;">
+    <h2 style="font-size: 2rem; margin-bottom: 10px;">Evita las filas con nuestro Turnero Digital</h2>
+    <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 20px;">Agenda tu turno desde casa y acércate a la sucursal solo cuando sea el momento de ser atendido. ¡Ahorra tiempo!</p>
+    <a routerLink="/turnero" style="display: inline-block; background: white; color: #da291c; font-weight: bold; padding: 12px 24px; border-radius: 25px; text-decoration: none; transition: transform 0.2s;">Solicitar Turno Ahora 🎫</a>
+  </div>
+  <div style="font-size: 5rem; line-height: 1; opacity: 0.8;">
+    ⏱️
+  </div>
+</section>
+
+<!-- CATEGORIAS -->
+<section class="categorias">
+  <h2>Explora por categoría</h2>
+  <div class="cat-grid">
+    <a routerLink="/tienda" class="cat-item">
+      <span>📱</span><strong>Móvil</strong>
+      <small>Planes postpago e internet</small>
+    </a>
+    <a routerLink="/tienda" class="cat-item">
+      <span>🏠</span><strong>Hogar</strong>
+      <small>Fibra óptica y TV</small>
+    </a>
+    <a routerLink="/tienda" class="cat-item">
+      <span>🎬</span><strong>Entretenimiento</strong>
+      <small>Streaming y contenido</small>
+    </a>
+    <a routerLink="/turnero" class="cat-item">
+      <span>🎫</span><strong>Turnero</strong>
+      <small>Solicita tu turno online</small>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,59 @@
+<div class="carrito-page">
+  <div class="carrito-header">
+    <h1>🛒 Mi Carrito</h1>
+    <p>Revisa y finaliza tu compra</p>
+  </div>
+
+  <div *ngIf="mensaje" class="alerta" [class.alerta-exito]="!mensajeError" [class.alerta-error]="mensajeError">
+    {{ mensaje }}
+  </div>
+
+  <div *ngIf="carrito.length === 0 && !mensajeError" class="sin-datos">
+    <p>No tienes productos en tu carrito.</p>
+    <button class="btn-volver" routerLink="/tienda">Ir a la tienda</button>
+  </div>
+
+  <div class="carrito-container" *ngIf="carrito.length > 0">
+    <div class="carrito-items">
+      <h2>Productos</h2>
+      <div *ngFor="let plan of carrito; let i = index" class="carrito-item">
+        <div class="item-icono">{{ plan.tipo === 'MOVIL' ? '📱' : plan.tipo === 'HOGAR' ? '🏠' : '🎬' }}</div>
+        <div class="item-info">
+          <h3>{{ plan.nombre }}</h3>
+          <p>{{ plan.descripcion }}</p>
+        </div>
+        <div class="item-precio">{{ formatPrecio(plan.precio) }}</div>
+        <button class="btn-eliminar" (click)="eliminarDelCarrito(i)">🗑️</button>
+      </div>
+    </div>
+
+    <div class="carrito-resumen">
+      <h2>Resumen de Compra</h2>
+      <div class="resumen-fila">
+        <span>Subtotal</span>
+        <span>{{ formatPrecio(getTotal()) }}</span>
+      </div>
+      <div class="resumen-total">
+        <span>Total a pagar</span>
+        <span>{{ formatPrecio(getTotal()) }}</span>
+      </div>
+
+      <div class="metodos-pago">
+        <h3>Método de pago</h3>
+        <div class="metodos-grid">
+          <div *ngFor="let metodo of metodosPago" 
+               class="metodo-card" 
+               [class.seleccionado]="metodoPagoSeleccionado === metodo.id"
+               (click)="seleccionarMetodo(metodo.id)">
+            <span class="metodo-icono">{{ metodo.icono }}</span>
+            <span class="metodo-nombre">{{ metodo.nombre }}</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-comprar" [disabled]="procesando || !metodoPagoSeleccionado" (click)="comprar()">
+        {{ procesando ? 'Procesando...' : 'Finalizar Compra' }}
+      </button>
+    </div>
+  </div>
+</div>
