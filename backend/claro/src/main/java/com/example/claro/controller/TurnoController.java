@@ -1,37 +1,33 @@
 package com.example.claro.controller;
 
-import com.example.claro.model.Departamento;
+import com.example.claro.dto.TurnoRequestDTO;
 import com.example.claro.model.Turno;
-import com.example.claro.model.Usuario;
-import com.example.claro.repository.DepartamentoRepository;
 import com.example.claro.repository.TurnoRepository;
-import com.example.claro.repository.UsuarioRepository;
+import com.example.claro.service.TurnoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/turnos")
+@Tag(name = "Turnos", description = "Cola de turnos, creación y gestión (ratio 3:1 y aging)")
 public class TurnoController {
 
     @Autowired
     private TurnoRepository turnoRepository;
-
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private TurnoService turnoService;
 
-    @Autowired
-    private DepartamentoRepository departamentoRepository;
-
-    /** Cola de turnos PENDIENTES ordenados por prioridad */
+    /** Cola de turnos PENDIENTES ordenados por prioridad y FIFO */
     @GetMapping("/cola")
     public List<Turno> cola() {
-        return turnoRepository.findByEstadoOrderByPrioridadActualAscFechaCreacionAsc(Turno.EstadoTurno.PENDIENTE);
+        return turnoRepository.findByEstadoOrderByPrioridadActualAscFechaCreacionAsc(
+                Turno.EstadoTurno.PENDIENTE);
     }
 
     /** Historial de turnos de un usuario */
@@ -42,31 +38,31 @@ public class TurnoController {
 
     /** Crear un nuevo turno */
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Map<String, Long> body) {
-        Long usuarioId = body.get("usuarioId");
-        Long departamentoId = body.get("departamentoId");
-
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
-        Optional<Departamento> deptOpt = departamentoRepository.findById(departamentoId);
-
-        if (usuarioOpt.isEmpty()) return ResponseEntity.badRequest().body("Usuario no encontrado");
-        if (deptOpt.isEmpty()) return ResponseEntity.badRequest().body("Departamento no encontrado");
-
-        Departamento dept = deptOpt.get();
-        Turno turno = new Turno();
-        turno.setUsuario(usuarioOpt.get());
-        turno.setDepartamento(dept);
-        turno.setPrioridadActual(BigDecimal.valueOf(dept.getNivelPrioridad()));
-
-        // Generar número correlativo: prefijo + cantidad de turnos + 1
-        long count = turnoRepository.count() + 1;
-        turno.setNumeroCorrelativo(dept.getCodigoPrefijo() + String.format("%03d", count));
-
-        Turno guardado = turnoRepository.save(turno);
-        return ResponseEntity.ok(guardado);
+    public ResponseEntity<?> crear(@Valid @RequestBody TurnoRequestDTO dto) {
+        try {
+            Turno guardado = turnoService.crearTurno(dto);
+            return ResponseEntity.ok(guardado);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    /** Llamar el siguiente turno PENDIENTE de un departamento */
+    /** Seleccionar y llamar el siguiente turno respetando ratio 3:1 y aging */
+    @PutMapping("/siguiente/llamar")
+    public ResponseEntity<?> llamarSiguiente() {
+        Optional<Turno> siguiente = turnoService.seleccionarSiguiente();
+        if (siguiente.isEmpty()) {
+            return ResponseEntity.ok("No hay turnos pendientes en la cola");
+        }
+        Turno t = siguiente.get();
+        t.setEstado(Turno.EstadoTurno.LLAMADO);
+        t.setFechaLlamado(java.time.LocalDateTime.now());
+        return ResponseEntity.ok(turnoRepository.save(t));
+    }
+
+    /** Llamar un turno específico por ID */
     @PutMapping("/{id}/llamar")
     public ResponseEntity<?> llamar(@PathVariable Long id) {
         return turnoRepository.findById(id).map(t -> {

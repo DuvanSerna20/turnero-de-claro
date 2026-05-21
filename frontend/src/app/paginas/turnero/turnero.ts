@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TurnosService } from '../../service/turnos.service';
 import { AuthService } from '../../service/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-turnero',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './turnero.html',
   styleUrl: './turnero.css',
 })
@@ -17,6 +18,7 @@ export class Turnero implements OnInit, OnDestroy {
   mensaje = '';
   mensajeError = false;
   turnoCreado: any = null;
+  esPrioritario = false;
   private autoRefresh: any;
 
   constructor(
@@ -24,11 +26,11 @@ export class Turnero implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarDatos();
-    // Auto-refrescar la cola cada 5 segundos
+
     this.autoRefresh = setInterval(() => {
       this.cargarCola(true);
     }, 5000);
@@ -60,19 +62,17 @@ export class Turnero implements OnInit, OnDestroy {
   cargarCola(esRefreshOculto = false) {
     if (!esRefreshOculto) this.cargando = true;
     this.turnosService.obtenerCola().subscribe({
-      next: (cola) => { 
-        this.cola = cola; 
-        this.cargando = false; 
+      next: (cola) => {
+        this.cola = cola;
+        this.cargando = false;
 
         // Verificar si el turno del usuario fue llamado
         if (this.turnoCreado) {
           const miTurnoSiguePendiente = this.cola.find(t => t.id === this.turnoCreado.id);
           if (!miTurnoSiguePendiente) {
-            // Ya no está pendiente, fue llamado!
             this.mensaje = `🔔 ¡Tu turno ${this.turnoCreado.numeroCorrelativo} ha sido llamado a ventanilla!`;
             this.mensajeError = false;
             this.turnoCreado = null;
-            // Limpiar mensaje después de un tiempo
             setTimeout(() => {
               if (this.mensaje.includes('llamado')) this.mensaje = '';
               this.cdr.detectChanges();
@@ -82,8 +82,8 @@ export class Turnero implements OnInit, OnDestroy {
 
         this.cdr.detectChanges();
       },
-      error: () => { 
-        this.cargando = false; 
+      error: () => {
+        this.cargando = false;
         this.cdr.detectChanges();
       }
     });
@@ -98,16 +98,19 @@ export class Turnero implements OnInit, OnDestroy {
       setTimeout(() => this.router.navigate(['/mi-cuenta/login']), 1500);
       return;
     }
-    this.turnosService.crearTurno(usuario.id, departamentoId).subscribe({
+    // Ahora se envía también esPrioritario al backend
+    this.turnosService.crearTurno(usuario.id, departamentoId, this.esPrioritario).subscribe({
       next: (turno) => {
         this.turnoCreado = turno;
-        this.mensaje = `✅ Turno ${turno.numeroCorrelativo} creado exitosamente.`;
+        const tipo = this.esPrioritario ? ' (Preferencial ⭐)' : '';
+        this.mensaje = `✅ Turno ${turno.numeroCorrelativo}${tipo} creado exitosamente.`;
         this.mensajeError = false;
+        this.esPrioritario = false; // resetear checkbox
         this.cargarCola();
         this.cdr.detectChanges();
       },
-      error: () => {
-        this.mensaje = 'Error al crear el turno.';
+      error: (err) => {
+        this.mensaje = err?.error || 'Error al crear el turno.';
         this.mensajeError = true;
         this.cdr.detectChanges();
       }

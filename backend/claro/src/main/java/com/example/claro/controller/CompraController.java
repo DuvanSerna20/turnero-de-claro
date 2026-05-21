@@ -1,5 +1,6 @@
 package com.example.claro.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.claro.model.Compra;
 import com.example.claro.model.PlanServicio;
 import com.example.claro.model.Usuario;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/compras")
+@Tag(name = "Compras", description = "Historial y registro de compras de planes")
 public class CompraController {
 
     @Autowired

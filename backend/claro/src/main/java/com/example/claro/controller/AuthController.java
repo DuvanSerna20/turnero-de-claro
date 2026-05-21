@@ -1,5 +1,6 @@
 package com.example.claro.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.claro.model.Usuario;
 import com.example.claro.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Autenticación", description = "Registro e inicio de sesión de usuarios")
 public class AuthController {
 
     @Autowired

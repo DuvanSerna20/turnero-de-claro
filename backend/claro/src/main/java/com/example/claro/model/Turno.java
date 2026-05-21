@@ -32,6 +32,9 @@ public class Turno {
     @Column(name = "prioridad_actual", nullable = false, precision = 3, scale = 1)
     private BigDecimal prioridadActual;
 
+    @Column(name = "es_prioritario", nullable = false)
+    private Boolean esPrioritario = false;
+
     @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 

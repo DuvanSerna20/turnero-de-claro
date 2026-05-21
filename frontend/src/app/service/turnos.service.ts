@@ -24,8 +24,12 @@ export class TurnosService {
     return this.http.get<any[]>(`${this.apiBase}/turnos/usuario/${usuarioId}`);
   }
 
-  crearTurno(usuarioId: number, departamentoId: number): Observable<any> {
-    return this.http.post<any>(`${this.apiBase}/turnos`, { usuarioId, departamentoId });
+  crearTurno(usuarioId: number, departamentoId: number, esPrioritario: boolean = false): Observable<any> {
+    return this.http.post<any>(`${this.apiBase}/turnos`, { usuarioId, departamentoId, esPrioritario });
+  }
+
+  llamarSiguiente(): Observable<any> {
+    return this.http.put<any>(`${this.apiBase}/turnos/siguiente/llamar`, {});
   }
 
   llamarTurno(turnoId: number): Observable<any> {

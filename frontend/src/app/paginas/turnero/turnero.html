@@ -9,9 +9,10 @@
     {{ mensaje }}
   </div>
 
-  <!-- Turno creado actualmente -->
+  <!-- Turno activo -->
   <div *ngIf="turnoCreado" class="turno-activo">
     <div class="turno-numero">{{ turnoCreado.numeroCorrelativo }}</div>
+    <div *ngIf="turnoCreado.esPrioritario" class="badge-prioritario-activo">⭐ Atención Preferencial</div>
     <p>Tu turno está en cola — <strong>{{ turnoCreado.departamento?.nombre }}</strong></p>
     <button class="btn-cancelar" (click)="cancelarTurno(turnoCreado.id)">❌ Cancelar turno</button>
   </div>
@@ -26,6 +27,18 @@
     <!-- Departamentos -->
     <div class="seccion">
       <h2>Selecciona un departamento</h2>
+
+      <!-- Checkbox Atención Preferencial -->
+      <div class="checkbox-preferencial">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="esPrioritario" id="chk-prioritario" />
+          <span class="checkbox-texto">
+            ⭐ Soy persona de tercera edad, mujer embarazada o persona con discapacidad
+            <em>(Atención Preferencial)</em>
+          </span>
+        </label>
+      </div>
+
       <div class="departamentos-grid">
         <div *ngFor="let dept of departamentos" class="dept-card" [class.prioritario]="dept.esPrioritario">
           <div class="dept-codigo">{{ dept.codigoPrefijo }}</div>
@@ -43,12 +56,13 @@
       <h2>Cola de espera ({{ cola.length }} turnos)</h2>
       <div *ngIf="cola.length === 0" class="sin-datos">No hay turnos pendientes. 🎉</div>
       <div class="cola-lista">
-        <div *ngFor="let t of cola; let i = index" class="cola-item">
+        <div *ngFor="let t of cola; let i = index" class="cola-item" [class.cola-item-prioritario]="t.esPrioritario">
           <span class="posicion">{{ i + 1 }}</span>
           <div class="cola-info">
             <strong>{{ t.numeroCorrelativo }}</strong>
             <span>{{ t.departamento?.nombre }}</span>
           </div>
+          <span *ngIf="t.esPrioritario" class="badge-mini">⭐</span>
           <span class="espera">⏱ {{ calcularEspera(t.fechaCreacion) }}</span>
         </div>
       </div>
