@@ -9,7 +9,7 @@ Aplicacion full stack desarrollada como proyecto final academico. Simula la expe
 | Base de datos | MySQL 8 (turnero_claro) |
 | Documentacion API | Swagger UI (SpringDoc OpenAPI 3) |
 
-**Autora:** Sandra
+**Autor:** Duvan
 
 ---
 
