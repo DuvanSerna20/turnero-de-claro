@@ -9,13 +9,13 @@
   </div>
 
   <div *ngIf="carrito.length === 0 && !mensajeError" class="sin-datos">
-    <p>No tienes productos en tu carrito.</p>
+    <p>No tienes planes en tu carrito.</p>
     <button class="btn-volver" routerLink="/tienda">Ir a la tienda</button>
   </div>
 
   <div class="carrito-container" *ngIf="carrito.length > 0">
     <div class="carrito-items">
-      <h2>Productos</h2>
+      <h2>Planes seleccionados</h2>
       <div *ngFor="let plan of carrito; let i = index" class="carrito-item">
         <div class="item-icono">{{ plan.tipo === 'MOVIL' ? '📱' : plan.tipo === 'HOGAR' ? '🏠' : '🎬' }}</div>
         <div class="item-info">

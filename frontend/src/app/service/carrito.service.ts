@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * Carrito en el navegador (localStorage). Guarda planes antes de comprar.
+ * No llama al backend hasta que el usuario confirma en la página carrito.
+ */
 @Injectable({
   providedIn: 'root'
 })

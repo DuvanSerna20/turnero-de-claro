@@ -35,7 +35,7 @@ export class Tienda implements OnInit {
   cargarPlanes() {
     this.cargando = true;
     this.tiendaService.obtenerTodos().subscribe({
-      next: (data) => { 
+      next: (data: any[]) => { 
         this.planes = data; 
         this.cargando = false; 
         this.cdr.detectChanges();
@@ -56,7 +56,7 @@ export class Tienda implements OnInit {
       this.cargarPlanes();
     } else {
       this.tiendaService.obtenerPorTipo(tipo as any).subscribe({
-        next: (data) => { 
+        next: (data: any[]) => { 
           this.planes = data; 
           this.cargando = false; 
           this.cdr.detectChanges();

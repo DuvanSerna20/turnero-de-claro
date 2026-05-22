@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+/**
+ * Servicio de la tienda: consulta planes al backend (/api/planes).
+ */
 @Injectable({
   providedIn: 'root'
 })

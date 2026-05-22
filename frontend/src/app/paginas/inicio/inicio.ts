@@ -21,13 +21,13 @@ export class Inicio implements OnInit {
 
   ngOnInit() {
     this.tiendaService.obtenerTodos().subscribe({
-      next: (data) => {
+      next: (data: any[]) => {
         console.log('✅ Planes recibidos:', data);
         this.planes = data;
         this.cargando = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: unknown) => {
         console.error('❌ Error al cargar planes:', err);
         this.error = true;
         this.cargando = false;
