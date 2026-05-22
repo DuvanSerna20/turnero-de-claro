@@ -1,6 +1,5 @@
 package com.example.claro.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.claro.model.Departamento;
 import com.example.claro.repository.DepartamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/departamentos")
-@Tag(name = "Departamentos", description = "Áreas de atención del turnero (Ventas, Soporte, etc.)")
 public class DepartamentoController {
 
     @Autowired

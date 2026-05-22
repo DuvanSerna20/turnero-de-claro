@@ -4,7 +4,6 @@ import com.example.claro.dto.TurnoRequestDTO;
 import com.example.claro.model.Turno;
 import com.example.claro.repository.TurnoRepository;
 import com.example.claro.service.TurnoService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/turnos")
-@Tag(name = "Turnos", description = "Cola de turnos, creación y gestión (ratio 3:1 y aging)")
 public class TurnoController {
 
     @Autowired

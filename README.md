@@ -7,7 +7,7 @@ Aplicacion full stack desarrollada como proyecto final academico. Simula la expe
 | Frontend | Angular 21, TypeScript, RxJS |
 | Backend | Spring Boot 4, Java 17, JPA/Hibernate |
 | Base de datos | MySQL 8 (turnero_claro) |
-| Documentacion API | Swagger UI (SpringDoc OpenAPI 3) |
+| API REST | Spring Boot en puerto 8080 |
 
 **Autor:** Duvan
 
@@ -81,14 +81,9 @@ URL: http://localhost:8080
 
 ---
 
-## 3. Swagger - Documentacion de la API
+## 3. API REST - Endpoints principales
 
-| Recurso | URL |
-|---------|-----|
-| Swagger UI | http://localhost:8080/swagger-ui.html |
-| OpenAPI JSON | http://localhost:8080/api-docs |
-
-### Endpoints
+Base URL: **http://localhost:8080**
 
 | Modulo | Base | Operaciones |
 |--------|------|-------------|
@@ -137,7 +132,7 @@ URL: http://localhost:4200
 ## Orden de ejecucion
 
 1. MySQL + script SQL
-2. Backend (puerto 8080) + Swagger
+2. Backend (puerto 8080)
 3. Frontend (puerto 4200)
 
 ---
@@ -146,8 +141,7 @@ URL: http://localhost:4200
 
 - Arquitectura en capas: Controller -> Service -> Repository -> Entity
 - Validacion con Jakarta Validation y GlobalExceptionHandler
-- SpringDoc OpenAPI 3 en OpenApiConfig.java
-- Tareas programadas: TurnoSimuladorService
+- Tareas programadas: TurnoSimuladorService (avance automatico de la cola)
 
 ---
 
@@ -157,7 +151,7 @@ URL: http://localhost:4200
 |---------|----------|
 | ECONNREFUSED | Iniciar Spring Boot en 8080 |
 | 404 en POST /api/turnos | Reiniciar backend tras cambios |
-| Swagger no carga | mvn clean install en backend/claro |
+| Pantalla de turnos vacia | Verificar MySQL y application.properties |
 
 ---
 
