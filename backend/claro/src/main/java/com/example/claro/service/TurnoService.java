@@ -16,36 +16,43 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Servicio con la lógica de negocio del turnero.
+ * Aquí están las reglas: crear turno, ratio 3:1, aging y número correlativo.
+ */
 @Service
 public class TurnoService {
 
-    // ── Contador del ratio 3:1 ─────────────────────────────────────────────────
-    // Cuántos prioritarios seguidos se han llamado. Cuando llega a 3,
-    // el siguiente llamado es forzado a ser un regular (si hay alguno).
+    /**
+     * Contador en memoria: cuántos turnos prioritarios se llamaron seguidos.
+     * Al llegar a 3, el siguiente debe ser un turno regular (ratio 3:1).
+     */
     private final AtomicInteger consecutivosPrioritarios = new AtomicInteger(0);
 
-    // Minutos de espera antes de que el aging "suba" la prioridad de un regular
+    /** Minutos de espera para que un turno regular "suba" de prioridad (aging) */
     private static final int MINUTOS_AGING = 15;
 
     @Autowired private TurnoRepository turnoRepository;
     @Autowired private UsuarioRepository usuarioRepository;
     @Autowired private DepartamentoRepository departamentoRepository;
 
-    // ── 1. Crear turno ─────────────────────────────────────────────────────────
+    /**
+     * Crea un turno nuevo en estado PENDIENTE.
+     * Valida usuario/departamento, evita duplicados y asigna número (ej. VEN-001).
+     */
     public Turno crearTurno(TurnoRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         Departamento dept = departamentoRepository.findById(dto.getDepartamentoId())
                 .orElseThrow(() -> new IllegalArgumentException("Departamento no encontrado"));
 
-        // Evitar que un usuario tenga dos turnos pendientes en el mismo departamento
+        // Un usuario no puede tener dos turnos pendientes en el mismo departamento
         long pendientes = turnoRepository.countByUsuarioIdAndDepartamentoIdAndEstado(
                 dto.getUsuarioId(), dto.getDepartamentoId(), Turno.EstadoTurno.PENDIENTE);
         if (pendientes > 0) {
             throw new IllegalStateException("Ya tienes un turno pendiente en este departamento");
         }
 
-        // Número correlativo: prefijo + número secuencial (ej. P-001, V-002)
         String numero = generarNumeroCorrelativo(dept.getCodigoPrefijo());
 
         Turno turno = new Turno();
@@ -54,8 +61,7 @@ public class TurnoService {
         turno.setNumeroCorrelativo(numero);
         turno.setEsPrioritario(dto.getEsPrioritario());
 
-        // La prioridad base viene del departamento; si es prioritario se reduce
-        // para que aparezca antes en la cola (menor número = mayor prioridad)
+        // Prioridad base del departamento; si es preferencial se resta 5 (pasa antes)
         BigDecimal prioridad = BigDecimal.valueOf(dept.getNivelPrioridad());
         if (Boolean.TRUE.equals(dto.getEsPrioritario())) {
             prioridad = prioridad.subtract(BigDecimal.valueOf(5));
@@ -65,7 +71,12 @@ public class TurnoService {
         return turnoRepository.save(turno);
     }
 
-    // ── 2. Seleccionar el siguiente turno a llamar (ratio 3:1 + aging) ─────────
+    /**
+     * Decide cuál es el siguiente turno a llamar aplicando:
+     * 1) Aging: regular con más de 15 min de espera va primero.
+     * 2) Ratio 3:1: tras 3 prioritarios seguidos, toca un regular.
+     * 3) Por defecto: primero prioritarios en orden FIFO, luego regulares.
+     */
     public Optional<Turno> seleccionarSiguiente() {
         List<Turno> prioritarios = turnoRepository
                 .findByEstadoAndEsPrioritarioOrderByFechaCreacionAsc(
@@ -74,24 +85,24 @@ public class TurnoService {
                 .findByEstadoAndEsPrioritarioOrderByFechaCreacionAsc(
                         Turno.EstadoTurno.PENDIENTE, false);
 
-        // Aging: si el regular más antiguo lleva más de MINUTOS_AGING, forzar su llamado
+        // Regla aging
         if (!regulares.isEmpty()) {
             Turno masAntiguoRegular = regulares.get(0);
             long minutosEsperando = java.time.Duration.between(
                     masAntiguoRegular.getFechaCreacion(), LocalDateTime.now()).toMinutes();
             if (minutosEsperando >= MINUTOS_AGING) {
-                consecutivosPrioritarios.set(0); // resetear contador
+                consecutivosPrioritarios.set(0);
                 return Optional.of(masAntiguoRegular);
             }
         }
 
-        // Ratio 3:1: si ya llamamos 3 prioritarios seguidos, forzar uno regular
+        // Regla ratio 3:1
         if (consecutivosPrioritarios.get() >= 3 && !regulares.isEmpty()) {
             consecutivosPrioritarios.set(0);
             return Optional.of(regulares.get(0));
         }
 
-        // Normal: prioridad → FIFO
+        // Flujo normal: prioritarios primero
         if (!prioritarios.isEmpty()) {
             consecutivosPrioritarios.incrementAndGet();
             return Optional.of(prioritarios.get(0));
@@ -102,16 +113,17 @@ public class TurnoService {
             return Optional.of(regulares.get(0));
         }
 
-        return Optional.empty(); // No hay nadie esperando
+        return Optional.empty();
     }
 
-    // ── 3. Número correlativo ──────────────────────────────────────────────────
+    /**
+     * Genera el siguiente número de turno con prefijo del departamento (VEN-001, RET-002).
+     */
     private String generarNumeroCorrelativo(String prefijo) {
         Optional<Turno> ultimo = turnoRepository.findLastByPrefijo(prefijo);
         int siguiente = 1;
         if (ultimo.isPresent()) {
             String numeroActual = ultimo.get().getNumeroCorrelativo();
-            // Extraer la parte numérica (ej. "V-007" → "007" → 7)
             try {
                 String parteNumerica = numeroActual.replaceAll("[^0-9]", "");
                 siguiente = Integer.parseInt(parteNumerica) + 1;

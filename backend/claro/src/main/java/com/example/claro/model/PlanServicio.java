@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 
+/**
+ * Entidad JPA: tabla planes_servicios.
+ * Planes que el cliente puede comprar en la tienda (móvil, hogar, entretenimiento).
+ */
 @Data
 @Entity
 @Table(name = "planes_servicios")

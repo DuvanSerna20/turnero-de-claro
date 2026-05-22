@@ -91,7 +91,6 @@ Base URL: **http://localhost:8080**
 | Departamentos | /api/departamentos | GET, GET /{id} |
 | Turnos | /api/turnos | GET /cola, GET /usuario/{id}, POST, PUT /siguiente/llamar, PUT /{id}/llamar, PUT /{id}/atender, PUT /{id}/cancelar |
 | Planes | /api/planes | GET, GET /tipo/{tipo}, GET /{id} |
-| Productos | /api/productos | GET, GET /tipo/{tipo}, GET /{id} |
 | Compras | /api/compras | GET /usuario/{id}, POST |
 
 Ejemplo POST /api/turnos:

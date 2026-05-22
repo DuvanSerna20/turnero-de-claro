@@ -10,9 +10,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manejador global de excepciones.
+ * Cuando falla una validación (@NotNull, etc.), devuelve un JSON con los errores
+ * en lugar de un error genérico del servidor.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Captura errores de validación en DTOs (ej. TurnoRequestDTO sin usuarioId).
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();

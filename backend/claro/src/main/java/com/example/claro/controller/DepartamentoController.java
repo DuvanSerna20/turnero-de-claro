@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST de departamentos.
+ * El turnero de Angular llama GET /api/departamentos para mostrar las tarjetas de áreas.
+ */
 @RestController
 @RequestMapping("/api/departamentos")
 public class DepartamentoController {
@@ -15,11 +19,13 @@ public class DepartamentoController {
     @Autowired
     private DepartamentoRepository departamentoRepository;
 
+    /** GET /api/departamentos — Lista todos los departamentos */
     @GetMapping
     public List<Departamento> listar() {
         return departamentoRepository.findAll();
     }
 
+    /** GET /api/departamentos/{id} — Obtiene un departamento por ID */
     @GetMapping("/{id}")
     public ResponseEntity<Departamento> obtener(@PathVariable Long id) {
         return departamentoRepository.findById(id)

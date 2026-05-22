@@ -10,14 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.example.claro.repository.ProductoRepository;
-import java.util.ArrayList;
-import java.util.HashMap;
-
+/**
+ * Controlador REST de compras de planes.
+ * Registra compras y muestra el historial al usuario.
+ */
 @RestController
 @RequestMapping("/api/compras")
 public class CompraController {
@@ -31,43 +33,34 @@ public class CompraController {
     @Autowired
     private PlanServicioRepository planServicioRepository;
 
-    @Autowired
-    private ProductoRepository productoRepository;
-
-    /** Historial de compras de un usuario */
+    /**
+     * GET /api/compras/usuario/{usuarioId}
+     * Historial de compras de planes del usuario.
+     */
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<?> porUsuario(@PathVariable Long usuarioId) {
         List<Compra> compras = compraRepository.findByUsuarioIdOrderByFechaCompraDesc(usuarioId);
         List<Map<String, Object>> result = new ArrayList<>();
-        
+
         for (Compra c : compras) {
+            if (c.getTipoItem() != Compra.TipoItem.PLAN) {
+                continue;
+            }
             Map<String, Object> map = new HashMap<>();
             map.put("id", c.getId());
             map.put("fechaCompra", c.getFechaCompra());
             map.put("metodoPago", c.getMetodoPago());
-            
-            // Reconstruir el objeto para que el frontend de Angular no se rompa
-            if (c.getTipoItem() == Compra.TipoItem.PLAN) {
-                planServicioRepository.findById(c.getItemId()).ifPresent(plan -> {
-                    map.put("plan", plan);
-                });
-            } else if (c.getTipoItem() == Compra.TipoItem.PRODUCTO) {
-                productoRepository.findById(c.getItemId()).ifPresent(prod -> {
-                    // Mapeamos el producto con las mismas llaves que un plan para la UI
-                    Map<String, Object> mockPlan = new HashMap<>();
-                    mockPlan.put("nombre", prod.getNombre());
-                    mockPlan.put("tipo", prod.getTipo().toString());
-                    mockPlan.put("descripcion", prod.getDescripcion());
-                    mockPlan.put("precio", prod.getPrecio());
-                    map.put("plan", mockPlan); 
-                });
-            }
+
+            planServicioRepository.findById(c.getItemId()).ifPresent(plan -> map.put("plan", plan));
             result.add(map);
         }
         return ResponseEntity.ok(result);
     }
 
-    /** Registrar una nueva compra */
+    /**
+     * POST /api/compras
+     * Registra compra de un plan. Body: { usuarioId, planId, metodoPago }.
+     */
     @PostMapping
     public ResponseEntity<?> comprar(@RequestBody Map<String, Object> body) {
         Long usuarioId = Long.valueOf(body.get("usuarioId").toString());

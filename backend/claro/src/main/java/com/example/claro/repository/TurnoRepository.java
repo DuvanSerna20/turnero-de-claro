@@ -7,21 +7,27 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repositorio JPA para turnos.
+ * Contiene las consultas usadas por el turnero y TurnoService.
+ */
 public interface TurnoRepository extends JpaRepository<Turno, Long> {
 
+    /** Historial de turnos de un usuario, del más antiguo al más reciente */
     List<Turno> findByUsuarioIdOrderByFechaCreacionAsc(Long usuarioId);
 
+    /** Cola visible en pantalla: pendientes ordenados por prioridad y hora */
     List<Turno> findByEstadoOrderByPrioridadActualAscFechaCreacionAsc(Turno.EstadoTurno estado);
 
-    // Cola de prioritarios pendientes, orden FIFO
+    /** Lista de prioritarios o regulares en cola (para ratio 3:1) */
     List<Turno> findByEstadoAndEsPrioritarioOrderByFechaCreacionAsc(
             Turno.EstadoTurno estado, Boolean esPrioritario);
 
-    // Contar turnos pendientes de un usuario en un departamento (evitar duplicados)
+    /** Evita que un usuario tenga dos turnos PENDIENTE en el mismo departamento */
     long countByUsuarioIdAndDepartamentoIdAndEstado(
             Long usuarioId, Long departamentoId, Turno.EstadoTurno estado);
 
-    // Último número correlativo del día para un prefijo dado
+    /** Obtiene el último turno de un prefijo para generar el siguiente número (VEN-003) */
     @Query("SELECT t FROM Turno t WHERE t.departamento.codigoPrefijo = :prefijo ORDER BY t.id DESC LIMIT 1")
     Optional<Turno> findLastByPrefijo(String prefijo);
 }

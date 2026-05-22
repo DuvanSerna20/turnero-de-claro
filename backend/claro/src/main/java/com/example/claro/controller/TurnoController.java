@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST del módulo de turnos.
+ * Recibe peticiones HTTP y delega la lógica compleja a TurnoService.
+ */
 @RestController
 @RequestMapping("/api/turnos")
 public class TurnoController {
@@ -21,20 +25,29 @@ public class TurnoController {
     @Autowired
     private TurnoService turnoService;
 
-    /** Cola de turnos PENDIENTES ordenados por prioridad y FIFO */
+    /**
+     * GET /api/turnos/cola
+     * Devuelve turnos PENDIENTES ordenados por prioridad (pantalla del turnero).
+     */
     @GetMapping("/cola")
     public List<Turno> cola() {
         return turnoRepository.findByEstadoOrderByPrioridadActualAscFechaCreacionAsc(
                 Turno.EstadoTurno.PENDIENTE);
     }
 
-    /** Historial de turnos de un usuario */
+    /**
+     * GET /api/turnos/usuario/{usuarioId}
+     * Historial de turnos de un cliente.
+     */
     @GetMapping("/usuario/{usuarioId}")
     public List<Turno> porUsuario(@PathVariable Long usuarioId) {
         return turnoRepository.findByUsuarioIdOrderByFechaCreacionAsc(usuarioId);
     }
 
-    /** Crear un nuevo turno */
+    /**
+     * POST /api/turnos
+     * Crea un turno nuevo. Body: { usuarioId, departamentoId, esPrioritario }.
+     */
     @PostMapping
     public ResponseEntity<?> crear(@Valid @RequestBody TurnoRequestDTO dto) {
         try {
@@ -47,7 +60,10 @@ public class TurnoController {
         }
     }
 
-    /** Seleccionar y llamar el siguiente turno respetando ratio 3:1 y aging */
+    /**
+     * PUT /api/turnos/siguiente/llamar
+     * Llama al siguiente turno s y aging (TurnoService).
+     */
     @PutMapping("/siguiente/llamar")
     public ResponseEntity<?> llamarSiguiente() {
         Optional<Turno> siguiente = turnoService.seleccionarSiguiente();

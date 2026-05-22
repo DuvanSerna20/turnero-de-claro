@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Controlador REST de autenticación.
+ * Expone /api/auth para registro e inicio de sesión (usado por Angular AuthService).
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -15,6 +19,10 @@ public class AuthController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    /**
+     * POST /api/auth/registro
+     * Crea un usuario nuevo. Valida que email y documento no existan.
+     */
     @PostMapping("/registro")
     public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario) {
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
@@ -28,6 +36,10 @@ public class AuthController {
         return ResponseEntity.ok(nuevoUsuario);
     }
 
+    /**
+     * POST /api/auth/login
+     * Verifica email y contraseña. Devuelve el usuario o error 401.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario loginRequest) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(loginRequest.getEmail());

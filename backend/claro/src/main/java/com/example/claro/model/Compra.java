@@ -5,6 +5,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
+/**
+ * Entidad JPA: tabla compras.
+ * Registra cada compra de un plan realizada por un usuario.
+ */
 @Data
 @Entity
 @Table(name = "compras")
@@ -22,6 +26,7 @@ public class Compra {
     @Column(name = "tipo_item", columnDefinition = "ENUM('PLAN','PRODUCTO') NOT NULL")
     private TipoItem tipoItem;
 
+    /** ID del plan comprado */
     @Column(name = "item_id", nullable = false)
     private Long itemId;
 

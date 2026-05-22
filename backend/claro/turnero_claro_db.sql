@@ -27,21 +27,15 @@ CREATE TABLE planes_servicios (
     precio DECIMAL(10,2) NOT NULL
 );
 
-CREATE TABLE productos (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(150) NOT NULL,    -- Ej: 'iPhone 15 Pro Max'
-    marca VARCHAR(50) NOT NULL,      -- Ej: 'Apple'
-    tipo ENUM('CELULAR', 'COMPUTADOR', 'ACCESORIOS') NOT NULL,
-    descripcion TEXT,
-    precio DECIMAL(10,2) NOT NULL
-);
+-- Módulo productos (celulares/dispositivos): no usado en la app, solo planes + turnero
+-- CREATE TABLE productos (...);
 
--- Tabla unificada de compras (Soporta Planes y Dispositivos)
+-- Tabla de compras de planes
 CREATE TABLE compras (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     usuario_id BIGINT NOT NULL,
     tipo_item ENUM('PLAN', 'PRODUCTO') NOT NULL, 
-    item_id BIGINT NOT NULL, -- Apunta al ID de 'planes_servicios' u 'productos' desde el código
+    item_id BIGINT NOT NULL, -- ID del plan en planes_servicios
     fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     metodo_pago VARCHAR(50) DEFAULT 'Tarjeta de Crédito',
     precio_pagado DECIMAL(10,2) NOT NULL,
@@ -83,12 +77,6 @@ INSERT INTO planes_servicios (nombre, tipo, descripcion, precio) VALUES
 ('Plan Postpago Ilimitado', 'MOVIL', 'Datos y minutos ilimitados', 60000.00),
 ('Internet Fibra Óptica 500MB', 'HOGAR', 'Internet hogar de alta velocidad', 80000.00),
 ('Claro TV + Netflix', 'ENTRETENIMIENTO', 'Televisión digital más suscripción Netflix', 95000.00);
-
-INSERT INTO productos (nombre, marca, tipo, descripcion, precio) VALUES 
-('Samsung Galaxy S24 Ultra 512GB', 'Samsung', 'CELULAR', 'Pantalla 6.8, Cámara 200MP', 5499900.00),
-('iPhone 15 Pro Max 256GB', 'Apple', 'CELULAR', 'Titanio, Chip A17 Pro', 5899900.00),
-('Portátil Lenovo ThinkPad E14', 'Lenovo', 'COMPUTADOR', 'Ryzen 5, 16GB RAM, 512GB SSD', 3200000.00),
-('Audífonos Huawei FreeBuds 5i', 'Huawei', 'ACCESORIOS', 'Cancelación de ruido activa', 350000.00);
 
 
 

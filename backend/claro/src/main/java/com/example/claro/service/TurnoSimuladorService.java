@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Simulador automático de la cola de turnos.
+ * Se ejecuta cada 60 segundos sin intervención del usuario (requiere @EnableScheduling en ClaroApplication).
+ */
 @Service
 public class TurnoSimuladorService {
 
@@ -18,15 +22,16 @@ public class TurnoSimuladorService {
     @Autowired private TurnoService turnoService;
 
     /**
-     * Se ejecuta cada 60 segundos.
-     * 1. Finaliza los turnos LLAMADO → ATENDIDO
-     * 2. Llama al siguiente PENDIENTE respetando ratio 3:1 + aging
+     * Tarea programada: cada 60.000 ms (1 minuto).
+     * 1) Pasa turnos LLAMADO → ATENDIDO
+     * 2) Llama al siguiente PENDIENTE (ratio 3:1 + aging)
+     * 3) Envía correo al cliente
      */
     @Scheduled(fixedRate = 60000)
     public void simularAvanceTurnos() {
         System.out.println("⏳ [Simulador] Revisando cola de turnos...");
 
-        // ── Paso 1: finalizar turnos que ya estaban LLAMADO ──────────────────
+        // Paso 1: finalizar turnos que ya estaban en ventanilla (LLAMADO)
         List<Turno> llamados = turnoRepository
                 .findByEstadoOrderByPrioridadActualAscFechaCreacionAsc(Turno.EstadoTurno.LLAMADO);
         for (Turno t : llamados) {
@@ -36,7 +41,7 @@ public class TurnoSimuladorService {
             System.out.println("✅ Turno " + t.getNumeroCorrelativo() + " finalizado → ATENDIDO");
         }
 
-        // ── Paso 2: llamar al siguiente con ratio 3:1 + aging ────────────────
+        // Paso 2: seleccionar y llamar el siguiente turno pendiente
         Optional<Turno> siguiente = turnoService.seleccionarSiguiente();
         if (siguiente.isEmpty()) {
             System.out.println("📭 No hay turnos pendientes en la cola.");
@@ -51,7 +56,7 @@ public class TurnoSimuladorService {
                 + (Boolean.TRUE.equals(turno.getEsPrioritario()) ? " [PRIORITARIO]" : " [REGULAR]")
                 + " llamado a ventanilla.");
 
-        // ── Paso 3: notificar al usuario por correo ───────────────────────────
+        // Paso 3: notificar por correo si el usuario tiene email
         if (turno.getUsuario() != null && turno.getUsuario().getEmail() != null) {
             String asunto = "🔔 ¡Es tu turno en Claro!";
             String tipoBadge = Boolean.TRUE.equals(turno.getEsPrioritario())
